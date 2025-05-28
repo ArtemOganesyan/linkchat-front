@@ -6,6 +6,6 @@ import ChatWindow from './components/ChatWindow.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ChatWindow />
+    <App />
   </StrictMode>,
 )
