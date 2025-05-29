@@ -1,0 +1,28 @@
+.message-list {
+  max-width: 800px;
+  max-height: 500px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 2px solid #cfe2ff;
+  border-radius: 12px;
+  background-color: #fff;
+  overflow-y: auto;
+}
+
+.message {
+  padding: 12px 16px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  max-width: 70%;
+}
+
+.message.left {
+  background-color: #e3f2fd;
+  text-align: left;
+}
+
+.message.right {
+  background-color: #d1e7dd;
+  text-align: right;
+  margin-left: auto;
+}
