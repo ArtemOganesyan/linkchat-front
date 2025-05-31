@@ -1,0 +1,15 @@
+.message-list {
+  max-width: 800px;
+  height: 500px;
+  margin: 20px auto;
+  padding: 16px;
+  border: 2px solid #cfe2ff;
+  border-radius: 12px;
+  background-color: #ffffff;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  scroll-behavior: smooth;
+}
+
