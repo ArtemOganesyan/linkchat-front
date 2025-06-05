@@ -1,25 +1,11 @@
 import React from 'react';
 import './Message.css';
 
-const MessageList = ({ messages }) => {
-  console.log('MessageList received messages:', messages);
-
-  return (
-    <div className="message-list">
-      {messages?.map((msg, index) => (
-        <div key={index} className="message">
-          {msg.text}
-        </div>
-      ))}
-    </div>
-  );
+const formatTime = (time) => {
+    const date = new Date(time);
+    // Format as HH:mm (24-hour, zero-padded)
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: false });
 };
-
-export default MessageList;
-function formatTime(date) {
-    const d = new Date(date);
-    return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-}
 
 function SentMessage({ message, timestamp }) {
     return (
@@ -69,3 +55,4 @@ function Message({ message, isUser, timestamp }) {
     );
 }
 
+export default Message;

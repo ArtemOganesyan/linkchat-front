@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import './MessageList.css';
+import Message from './Message';
 
 const MessageList = ({ messages }) => {
   const listRef = useRef(null);
@@ -14,25 +15,7 @@ const MessageList = ({ messages }) => {
     <div ref={listRef} className="message-list">
       {Array.isArray(messages) &&
         messages.map((msg, index) => (
-          <div
-            key={index}
-            style={{
-              alignSelf: msg.isUser ? 'flex-end' : 'flex-start',
-              backgroundColor: msg.isUser ? '#dcf8c6' : '#f1f0f0',
-              padding: '10px 14px',
-              borderRadius: '12px',
-              maxWidth: '70%',
-              wordBreak: 'break-word',
-              boxShadow: '0 1px 2px rgba(0,0,0,0.1)',
-            }}
-          >
-           {msg.text}
-           {msg.attachment && (
-              <div style={{ color: '#111', marginTop: 4 }}>
-                📎 {msg.attachment.name}
-              </div>
-            )}
-          </div>
+          <Message key={index} {...msg} />
         ))}
     </div>
   );
