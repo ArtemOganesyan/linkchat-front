@@ -21,23 +21,17 @@
   flex-direction: column;
   gap: 1.5rem;
 }
-
-.form-row {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.form-row label {
-  min-width: 60px;
-  color: #333;
+.input-group input {
+  width: 90%;
+  max-width: 280px;
+  padding: 0.65rem 0.9rem;
+  border-radius: 6px;
+  border: 1px solid #0f0707;
   font-size: 1em;
-  font-weight: 500;
-  margin-bottom: 0;
-}
-
-.form-row select {
-  flex: 1;
+  background: #f9f9fb;
+  text-align: center;
+  transition: border 0.2s, background 0.2s;
+  color: #222;
 }
 
 .login-container label:not(.form-row label) {
@@ -47,27 +41,13 @@
   margin-bottom: 0.3rem;
 }
 
-.login-container input,
-.login-container select {
-  width: 100%;
-  padding: 0.65rem 0.9rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  font-size: 1em;
-  background: #f9f9fb;
-  transition: border 0.2s, background 0.2s;
-}
 
 .login-container input:focus,
 .login-container select:focus {
   border: 1.5px solid #0078ff;
   outline: none;
   background: #fff;
-}
-.login-container select,
-.login-container option {
-  color: #111 !important;
-  background: #fff;
+
 }
 .login-container button {
   width: 100%;
