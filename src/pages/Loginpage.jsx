@@ -7,12 +7,26 @@ function Loginpage() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('user'); // New state for role
   const navigate = useNavigate();
+  const [message, setMessage] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Handle login logic here
     // alert(`Role: ${role}\nEmail: ${email}\nPassword: ${password}`);
-    navigate('/chat');
+    //navigate('/chat');
+    setMessage('');
+
+     if (email === 'admin@gmail.com' && password === 'test123') {
+  localStorage.setItem('token', 'mock-token');
+  localStorage.setItem('username', 'user');
+  localStorage.setItem('role', role);
+
+  setMessage('Welcome, user!');
+  setTimeout(() => navigate('/chat'), 1000);
+} else {
+  setMessage('Login failed: Invalid email or password');
+}
+
   };
 
   return (
@@ -32,6 +46,7 @@ function Loginpage() {
             type="email"
             value={email}
             onChange={e => setEmail(e.target.value)}
+            required
           />
         </div>
         <div>
@@ -40,9 +55,19 @@ function Loginpage() {
             type="password"
             value={password}
             onChange={e => setPassword(e.target.value)}
+            required
           />
         </div>
         <button type="submit">Log In</button>
+
+        {message && (
+          <p
+            className={`login-message ${message.startsWith('Welcome') ? 'success' : 'error'}`}
+          >
+            {message}
+          </p>
+        )}
+
       </form>
     </div>
   );

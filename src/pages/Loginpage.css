@@ -87,3 +87,18 @@
   background: linear-gradient(90deg, #005fcc 60%, #0078ff 100%);
   box-shadow: 0 4px 16px rgba(0,120,255,0.13);
 }
+
+.login-message {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.login-message.success {
+  color: #28a745;
+}
+
+.login-message.error {
+  color: #dc3545;
+}
