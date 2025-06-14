@@ -16,7 +16,7 @@ function Loginpage() {
     setMessage('');
 
     try {
-      const res = await fetch('https://fs-dev.portnov.com/ui/admin-login', {
+      const res = await fetch('https://fs-dev.portnov.com/api/auth', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
