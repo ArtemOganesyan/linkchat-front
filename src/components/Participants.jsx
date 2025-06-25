@@ -7,7 +7,7 @@ const Participants = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('https://fs-dev.portnov.com/api/chat')
+    fetch('http://localhost:8080/api/chat')
     .then(response => response.json())
     .then(data => {
       setParticipants(data.users);

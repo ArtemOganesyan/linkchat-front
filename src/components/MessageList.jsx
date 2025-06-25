@@ -17,28 +17,33 @@ const MessageList = ({ messages }) => {
       {(!Array.isArray(messages) || messages.length === 0) ? (
         <NoContentPlaceholder message="No messages yet." />
       ) : (
-        messages.map((msg, index) => (
+        
+        messages.map((msg) => (
           <div
-            key={index}
+            key={msg.messageId}
             style={{
-              alignSelf: msg.isUser ? 'flex-end' : 'flex-start',
-              backgroundColor: msg.isUser ?  '#dcf8c6' : '#f1f0f0',
+              alignSelf: msg.sender === 'You' ? 'flex-end' : 'flex-start',
+              backgroundColor: msg.sender === 'You' ? '#dcf8c6' : '#f1f0f0',
               padding: '10px 14px',
               borderRadius: '12px',
               maxWidth: '70%',
               wordBreak: 'break-word',
               boxShadow: '0 1px 2px rgba(39, 153, 28, 0.1)',
+              marginBottom: '8px'
             }}
           >
-           {msg.text}
-           {msg.attachment && (
-              <div style={{ color: '#111', marginTop: 4 }}>
-                📎 {msg.attachment.name}
-              </div>
-            )}
+            <div style={{ fontWeight: 'bold', marginBottom: 4 }}>{msg.sender}</div>
+            <div>{msg.messageText}</div>
+            <div style={{ fontSize: 12, color: '#888', marginTop: 4 }}>
+                 {msg.timestamp
+                 ? (!isNaN(Date.parse(msg.timestamp))
+                 ? new Date(msg.timestamp).toLocaleString()
+                 : msg.timestamp)
+             : ''}
+            </div>
           </div>
         ))
-        )}
+      )}
     </div>
   );
 };
