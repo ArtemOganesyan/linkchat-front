@@ -26,20 +26,12 @@ const MessageList = ({ messages, roomId }) => {
           return (
             <div
               key={msg?.id ?? index}
-              style={{
-                alignSelf: isMe ? 'flex-end' : 'flex-start',
-                backgroundColor: isMe ? '#dcf8c6' : '#f1f0f0',
-                padding: '10px 14px',
-                borderRadius: '12px',
-                maxWidth: '70%',
-                wordBreak: 'break-word',
-                boxShadow: '0 1px 2px rgba(39, 153, 28, 0.1)',
-              }}
+              className={`message-bubble ${isMe ? 'sent-message' : 'received-message'}`}
             >
               {text}
               <MessageImage msg={msg} roomId={roomId} />
               {msg?.attachment && (
-                <div style={{ color: '#111', marginTop: 4 }}>
+                <div className="message-attachment">
                   📎 {msg.attachment.name}
                 </div>
               )}
