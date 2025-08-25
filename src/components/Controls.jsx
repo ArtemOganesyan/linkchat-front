@@ -14,13 +14,37 @@ import './Controls.css';
     navigate('/logout');
   };
 
-  const handleSend = () => {
+  const handleSend = async () => {
     const trimmed = text.trim();
-    if (!trimmed && !attachment) return;
+    if (!trimmed) return;
+
+    const payload = {
+      sender: "alice",
+      recipient: "bob",
+      chatId: 1,
+      messageType: "TEXT",
+      messageText: trimmed,
+    };
+
+  try {
+    const response = await fetch("https://fs-dev.portnov.com/api/messages/text", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) throw new Error("Failed to send message");
+
+    const savedMessage = await response.json();
+
+    // Call parent to update UI
     onSend({ text: trimmed, isUser: true, attachment });
-    setText('');
-    setAttachment(null);
-  };
+
+    setText("");
+  } catch (err) {
+    console.error("Error sending message:", err);
+  }
+};
 
   const handleAttachClick = () => {
     fileInputRef.current.click();
