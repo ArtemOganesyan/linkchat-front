@@ -31,8 +31,9 @@ const MessageImage = ({ msg, roomId, maxHeight = 300, className, style }) => {
 
   // Build inline data URL when base64 is present
   let inlineSrc = null;
-  if (msg.imageData) {
-    const asString = String(msg.imageData);
+  const rawImage = msg.imageData || msg.imageBase64; // support both keys
+  if (rawImage) {
+    const asString = String(rawImage);
     if (asString.startsWith('data:')) {
       inlineSrc = asString; // already a data URL
     } else {

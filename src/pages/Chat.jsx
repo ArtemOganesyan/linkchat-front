@@ -80,7 +80,7 @@ const Chat = () => {
         messages={messages}
         leftContent={<Participants participants={participants} />}
         topRightContent={<MessageList messages={messages} roomId={roomId} />}
-        bottomRightContent={<Controls onSend={handleSend} />}
+  bottomRightContent={<Controls onSend={handleSend} roomId={roomId} />}
       />
     </div>
   );
