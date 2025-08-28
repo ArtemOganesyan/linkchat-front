@@ -5,7 +5,14 @@ import './Controls.css';
 const MAX_IMAGE_MB = 5;
 const ALLOWED_IMAGE_TYPES = ['image/png','image/jpeg','image/jpg','image/gif','image/webp'];
 
-const Controls = ({ onSend, sender = 'alice', recipient = 'bob', chatId = 1, roomId }) => {
+const Controls = ({
+  onSend,
+  sender = 'alice',
+  recipient = 'bob',
+  chatId = 1,
+  roomId,
+  backendBaseUrl = 'https://fs-dev.portnov.com', // allow override
+}) => {
   const [text, setText] = useState('');
   const [file, setFile] = useState(null);              // File object
   const [fileDataUrl, setFileDataUrl] = useState(null); // data:<mime>;base64,...
@@ -48,6 +55,8 @@ const Controls = ({ onSend, sender = 'alice', recipient = 'bob', chatId = 1, roo
     }
   };
 
+  const API_BASE = (backendBaseUrl || '').replace(/\/$/, '');
+
   // Send one message that includes the image and optional caption using the confirmed endpoint
   const sendCombinedImageMessage = async (base64, caption) => {
     if (!roomId) throw new Error('roomId required to send image');
@@ -58,7 +67,8 @@ const Controls = ({ onSend, sender = 'alice', recipient = 'bob', chatId = 1, roo
     };
     const filename = file?.name;
     const contentType = file?.type || 'image/png';
-    const endpoint = `/api/chat/${roomId}/image`;
+    // Use absolute URL so it always hits the correct backend (avoid dev proxy mismatch)
+    const endpoint = `${API_BASE}/api/chat/${roomId}/image`;
     const payload = {
       sender,
       recipient,
@@ -106,30 +116,58 @@ const Controls = ({ onSend, sender = 'alice', recipient = 'bob', chatId = 1, roo
 
   const sendPlainText = async (trimmed) => {
     const token = localStorage.getItem('token');
-    const response = await fetch('/api/messages/text', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
-      credentials: 'include',
-      body: JSON.stringify({ sender, recipient, chatId, messageType: 'TEXT', messageText: trimmed, roomId }),
-    });
-    if (!response.ok) throw new Error('Failed to send message');
-    let saved = null;
-    try { saved = await response.json(); } catch (_) {}
-    onSend({
-      id: saved?.messageId || Date.now(),
-      messageId: saved?.messageId,
-      text: trimmed,
-      messageText: trimmed,
-      isUser: true,
-      sender,
-      recipient,
-      messageType: 'TEXT',
-      timestamp: saved?.timestamp ? new Date(saved.timestamp) : new Date(),
-    });
-    setText('');
+    const headers = {
+      'Content-Type': 'application/json',
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+    const basePayload = { sender, recipient, chatId, messageType: 'TEXT', messageText: trimmed };
+    const endpointAttempts = [
+      `${API_BASE}/api/messages/text`, // original working absolute
+      '/api/messages/text',            // relative via Vite proxy
+      `${API_BASE}/api/messages`,      // alternative (if /text not required)
+      '/api/messages',
+      roomId ? `/api/chat/${roomId}/text` : null,
+    ].filter(Boolean);
+
+    let lastErr;
+    for (const ep of endpointAttempts) {
+      try {
+        console.log('[TextSend Attempt]', ep, basePayload);
+        const response = await fetch(ep, {
+          method: 'POST',
+          headers,
+          credentials: 'include',
+          body: JSON.stringify(basePayload),
+        });
+        if (!response.ok) {
+          const body = await response.text().catch(() => '');
+          console.warn('[TextSend Failed]', ep, response.status, body);
+          lastErr = new Error(`${ep} -> ${response.status}`);
+          continue;
+        }
+        let saved = null;
+        try { saved = await response.json(); } catch (_) {}
+        console.log('[TextSend Success]', ep, saved);
+        onSend({
+          id: saved?.messageId || Date.now(),
+          messageId: saved?.messageId,
+          text: trimmed,
+          messageText: trimmed,
+          isUser: true,
+          sender,
+          recipient,
+          messageType: 'TEXT',
+          timestamp: saved?.timestamp ? new Date(saved.timestamp) : new Date(),
+        });
+        setText('');
+        setError(null);
+        return;
+      } catch (e) {
+        console.warn('[TextSend Network Error]', ep, e);
+        lastErr = e;
+      }
+    }
+    throw lastErr || new Error('Failed to send message');
   };
 
   const handleAttachClick = () => fileInputRef.current?.click();

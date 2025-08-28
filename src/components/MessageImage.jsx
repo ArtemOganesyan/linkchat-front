@@ -6,7 +6,6 @@ import React from 'react';
 // - roomId: string (for server fallback URL)
 // - maxHeight?: number (optional, default 300)
 // - className?: string
-// - style?: React.CSSProperties
 const MessageImage = ({ msg, roomId, maxHeight = 300, className, style }) => {
   if (!msg) return null;
 
