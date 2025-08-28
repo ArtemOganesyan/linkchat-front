@@ -1,11 +1,7 @@
 import React from 'react';
 
 // Renders an image for a message by resolving inline base64 or falling back to server URL.
-// Props:
-// - msg: { messageId, messageType, imageData, imageFilename, imageContentType }
-// - roomId: string (for server fallback URL)
-// - maxHeight?: number (optional, default 300)
-// - className?: string
+
 const MessageImage = ({ msg, roomId, maxHeight = 300, className, style }) => {
   if (!msg) return null;
 
