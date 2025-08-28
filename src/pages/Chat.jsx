@@ -17,7 +17,7 @@ const Chat = () => {
 
       const fetchMessages = async () => {
         try {
-          // Use relative URL so dev proxy can handle CORS/cookies
+          // Use relative URL so dev proxy can handle CORS / cookies
           const response = await fetch(`/api/chat/${roomId}`);
           if (response.ok) {
             const chatData = await response.json();
@@ -80,7 +80,7 @@ const Chat = () => {
         messages={messages}
         leftContent={<Participants participants={participants} />}
         topRightContent={<MessageList messages={messages} roomId={roomId} />}
-        bottomRightContent={<Controls onSend={handleSend} />}
+  bottomRightContent={<Controls onSend={handleSend} roomId={roomId} />}
       />
     </div>
   );

@@ -1,12 +1,7 @@
 import React from 'react';
 
 // Renders an image for a message by resolving inline base64 or falling back to server URL.
-// Props:
-// - msg: { messageId, messageType, imageData, imageFilename, imageContentType }
-// - roomId: string (for server fallback URL)
-// - maxHeight?: number (optional, default 300)
-// - className?: string
-// - style?: React.CSSProperties
+
 const MessageImage = ({ msg, roomId, maxHeight = 300, className, style }) => {
   if (!msg) return null;
 
@@ -31,8 +26,9 @@ const MessageImage = ({ msg, roomId, maxHeight = 300, className, style }) => {
 
   // Build inline data URL when base64 is present
   let inlineSrc = null;
-  if (msg.imageData) {
-    const asString = String(msg.imageData);
+  const rawImage = msg.imageData || msg.imageBase64; // support both keys
+  if (rawImage) {
+    const asString = String(rawImage);
     if (asString.startsWith('data:')) {
       inlineSrc = asString; // already a data URL
     } else {

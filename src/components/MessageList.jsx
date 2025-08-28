@@ -21,7 +21,8 @@ const MessageList = ({ messages, roomId }) => {
           const isMe = (msg?.sender === 'me') || !!msg?.isUser;
           const text = msg?.messageText ?? msg?.text ?? '';
 
-          if (!text?.trim() && !msg?.attachment) return null;
+          const hasImage = !!msg?.imageData || (msg?.messageType && String(msg.messageType).toUpperCase().includes('IMAGE'));
+          if (!text?.trim() && !msg?.attachment && !hasImage) return null;
 
           return (
             <div
